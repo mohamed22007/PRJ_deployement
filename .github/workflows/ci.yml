@@ -1,0 +1,25 @@
+name: Test run
+
+on:
+    push:
+        branches: [ "main" ]
+    # declachment en cas de pull request 
+    #pull_request:
+    #    barnches: [ "main" ]
+
+jobs:
+    run-tests:
+        runs-on: unbuntu-latest
+
+        steps:
+            #1 - clone le code sur le serveur
+            - name: recuperer le site web
+              uses: actions/checkout@v4
+
+            #2 - Executer et compiler le site 
+            - name: run
+              run: make run
+
+            #3 - Netoyyer 
+            - name: clean
+              run: make clean
