@@ -16,6 +16,9 @@ jobs:
             - name: recuperer le site web
               uses: actions/checkout@v4
 
+            # Installation docker 
+            - name: docker
+              run: make install
             #2 - Executer et compiler le site 
             - name: run
               run: make run
