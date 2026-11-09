@@ -3,9 +3,9 @@ services:
   db:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: {$DB_NAME}
-      POSTGRES_USER: {$DB_USER}
-      POSTGRES_PASSWORD: {$DB_CODE}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_CODE}
 
   backend:
     build: ./backend
