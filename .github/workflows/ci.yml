@@ -9,7 +9,7 @@ on:
 
 jobs:
     run-tests:
-        runs-on: unbuntu-latest
+        runs-on: ubuntu-latest
 
         steps:
             #1 - clone le code sur le serveur
