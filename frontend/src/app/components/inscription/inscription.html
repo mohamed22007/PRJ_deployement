@@ -1,0 +1,24 @@
+<div class="inscription-container">
+  <h1>Creation de Compte</h1>
+  
+  <input type="text" 
+         [(ngModel)]="newPlayer.username" 
+         placeholder="username">
+  <br>
+
+  <input type="password" 
+         [(ngModel)]="newPlayer.password" 
+         placeholder="Mot de pass">
+  <br>
+  <input type="text" 
+         [(ngModel)]="newPlayer.email" 
+         placeholder="nom@example.com">
+  <br>
+  <input type="text" 
+         [(ngModel)]="newPlayer.nom" 
+         placeholder="Nom">
+  <br>
+  <button (click)="onCreate()">Creer</button>
+  <br>
+  <button (click)="retour()">retour</button>
+</div>

@@ -1,0 +1,194 @@
+.mail-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 16px;
+}
+
+.mail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.loading-dot {
+    margin-left: auto;
+    color: #a1887f;
+    font-size: 18px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.btn-refresh {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid #4b3621;
+    color: #4b3621;
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-refresh:hover {
+    background: #4b3621;
+    color: white;
+}
+
+.mail-error {
+    background: #fdecea;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.mail-header h2 {
+    margin: 0;
+}
+
+.unread-badge {
+    background: #d32f2f;
+    color: white;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.mail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.empty-inbox p {
+    color: #888;
+}
+
+.mail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #e0d4c8;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+
+.mail-item:hover {
+    background: #fdf5e6;
+    box-shadow: 0 2px 8px rgba(75, 54, 33, 0.1);
+}
+
+.mail-item.unread {
+    border-left: 4px solid #ffd700;
+    background: #fffde7;
+}
+
+.mail-item.open {
+    background: #fdf5e6;
+    box-shadow: 0 3px 12px rgba(75, 54, 33, 0.15);
+}
+
+.mail-icon {
+    font-size: 20px;
+    color: #4b3621;
+    padding-top: 2px;
+    min-width: 24px;
+}
+
+.mail-content {
+    flex: 1;
+}
+
+.mail-top-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.sender {
+    font-weight: bold;
+    font-size: 14px;
+    color: #4b3621;
+}
+
+.date {
+    font-size: 12px;
+    color: #888;
+}
+
+.subject {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.preview {
+    font-size: 12px;
+    color: #888;
+}
+
+.mail-body {
+    margin-top: 10px;
+    padding: 12px;
+    background: #f9f3ea;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.mail-body p {
+    margin: 0 0 10px 0;
+}
+
+.btn-join-game {
+    background: #4b3621;
+    color: #ffd700;
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.btn-join-game:hover {
+    background: #ffd700;
+    color: #4b3621;
+}
+
+.mail-actions {
+    display: flex;
+    align-items: flex-start;
+}
+
+.btn-read {
+    background: transparent;
+    border: 1px solid #4b3621;
+    color: #4b3621;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-read:hover {
+    background: #4b3621;
+    color: white;
+}

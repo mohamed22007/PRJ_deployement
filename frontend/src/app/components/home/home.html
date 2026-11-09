@@ -1,0 +1,28 @@
+<header class="top-nav">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <span class="logo-icon">👑</span>
+      <span class="logo-text">Zamma</span>
+    </div>
+
+    <nav class="menu-links">
+      <button routerLink="/home/profile" routerLinkActive="active">Profile</button>
+      <button routerLink="/home/game" routerLinkActive="active">Jouer</button>
+      <button routerLink="/home/histoire" routerLinkActive="active">Historique</button>
+      <button routerLink="/home/boitemail" routerLinkActive="active">Mail</button>
+      <button routerLink="/home/regles" routerLinkActive="active">Règles</button>
+    </nav>
+
+    <div class="user-info">
+      <span>
+          <div class="avatar-circle">
+            {{ user?.nom?.charAt(0) }}
+          </div>
+         <strong>{{ user?.nom }}</strong></span>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

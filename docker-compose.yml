@@ -1,0 +1,21 @@
+# Extrait du docker-compose.yml
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ma_base
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+    ports:
+      - "8787:8080" 
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ma_base
+      - SPRING_DATASOURCE_USERNAME=user      
+      - SPRING_DATASOURCE_PASSWORD=password   
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: on-failure 

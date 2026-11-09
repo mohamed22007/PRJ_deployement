@@ -1,0 +1,254 @@
+/* ─ Page ─────────────────────────────────────────────────── */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #1a0f07 0%, #2d1f13 60%, #3b2516 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 16px 50px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ─ Carte principale ─────────────────────────────────────── */
+.rules-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,215,0,0.22);
+  border-radius: 24px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.55);
+  padding: 32px 36px 28px;
+  max-width: 760px;
+  width: 100%;
+  color: #fdf5e6;
+}
+
+/* ─ En-tête ──────────────────────────────────────────────── */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.card-header h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #ffd700;
+  text-shadow: 0 2px 16px rgba(255,215,0,0.3);
+  margin: 0;
+}
+
+.logo-piece { font-size: 22px; }
+
+/* ─ Boutons de navigation ────────────────────────────────── */
+.demo-nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 20px;
+  border: 2px solid rgba(255,215,0,0.22);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  color: rgba(253,245,230,0.55);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.18s;
+  min-width: 80px;
+}
+
+.nav-btn:hover {
+  border-color: rgba(255,215,0,0.5);
+  color: #ffd700;
+  background: rgba(255,215,0,0.07);
+}
+
+.nav-active {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.14);
+  color: #ffd700;
+  box-shadow: 0 0 16px rgba(255,215,0,0.18);
+}
+
+.nav-icon  { font-size: 22px; }
+.nav-label { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+
+/* ─ Corps ────────────────────────────────────────────────── */
+.card-body {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ─ Plateau SVG ──────────────────────────────────────────── */
+.board-wrap { flex-shrink: 0; }
+
+.board-svg {
+  display: block;
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(139,105,69,0.35);
+}
+
+/* ─ Texte de règle ───────────────────────────────────────── */
+.rule-text {
+  flex: 1;
+  min-width: 220px;
+  max-width: 320px;
+}
+
+.rule-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffd700;
+  margin: 0 0 14px;
+  letter-spacing: 1px;
+}
+
+.rule-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(253,245,230,0.85);
+  margin: 0;
+}
+
+/* ─ Pied de carte ────────────────────────────────────────── */
+.card-footer {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,215,0,0.1);
+}
+
+.help-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(253,245,230,0.6);
+}
+
+.chip-key {
+  padding: 3px 10px;
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.28);
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #ffd700;
+}
+
+.chip-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00e676;
+  box-shadow: 0 0 5px #00e676;
+}
+
+/* ─ SVG : base des éléments animés ──────────────────────── */
+.tgt,
+.p-move,
+.p-cap-b, .p-cap-w,
+.p-chain-b, .p-chain-w1, .p-chain-w2,
+.p-moul-g, .p-moul-w {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Cibles vertes */
+.tgt {
+  animation: tgt-blink 1.2s ease-in-out infinite alternate;
+}
+@keyframes tgt-blink {
+  from { opacity: 0.5; }
+  to   { opacity: 1;   }
+}
+
+/* ─ Demo 0 : Déplacer — glisse vers en-haut-droite ──────── */
+.p-move {
+  animation: demo-move 3.2s ease-in-out infinite;
+}
+@keyframes demo-move {
+  0%, 18%   { transform: translate(0,    0);     }
+  40%, 65%  { transform: translate(70px, -70px); }
+  85%, 100% { transform: translate(0,    0);     }
+}
+
+/* ─ Demo 1 : Capturer — saut vertical 2 cases ───────────── */
+.p-cap-b {
+  animation: cap-b 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes cap-b {
+  0%, 15%   { transform: translateY(0);     }
+  45%, 72%  { transform: translateY(140px); }
+  92%, 100% { transform: translateY(0);     }
+}
+
+.p-cap-w {
+  animation: cap-w 4s ease-in-out infinite;
+}
+@keyframes cap-w {
+  0%, 28%   { opacity: 1; transform: scale(1);    }
+  42%, 100% { opacity: 0; transform: scale(0.25); }
+}
+
+/* ─ Demo 2 : Enchaîner — double saut diagonal ───────────── */
+.p-chain-b {
+  animation: chain-b 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes chain-b {
+  0%,  10% { transform: translate(0,     0);     }
+  28%, 40% { transform: translate(140px, 140px); }
+  58%, 70% { transform: translate(280px, 280px); }
+  88%, 100% { transform: translate(0,    0);     }
+}
+
+.p-chain-w1 {
+  animation: chain-w1 5.5s ease-in-out infinite;
+}
+@keyframes chain-w1 {
+  0%, 22%   { opacity: 1; transform: scale(1);   }
+  36%, 100% { opacity: 0; transform: scale(0.2); }
+}
+
+.p-chain-w2 {
+  animation: chain-w2 5.5s ease-in-out infinite;
+}
+@keyframes chain-w2 {
+  0%, 44%   { opacity: 1; transform: scale(1);   }
+  60%, 100% { opacity: 0; transform: scale(0.2); }
+}
+
+/* ─ Demo 3 : Moul — glisse toute la rangée ──────────────── */
+.p-moul-g {
+  animation: moul-g 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes moul-g {
+  0%, 12%   { transform: translateX(0);     }
+  40%, 80%  { transform: translateX(280px); }
+  96%, 100% { transform: translateX(0);     }
+}
+
+.p-moul-w {
+  animation: moul-w 5s ease-in-out infinite;
+}
+@keyframes moul-w {
+  0%, 35%   { opacity: 1; transform: scale(1);   }
+  48%, 100% { opacity: 0; transform: scale(0.2); }
+}

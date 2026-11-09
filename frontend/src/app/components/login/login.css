@@ -1,0 +1,94 @@
+/* On centre tout dans la page */
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fdf5e6;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.login-container {
+  background-color: #4b3621; /* Marron foncé */
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  width: 320px;
+  text-align: center;
+  border: 4px solid #ffd700; /* Bordure Jaune Or */
+}
+
+h1 {
+  color: #ffd700; /* Jaune Or */
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 24px;
+}
+
+/* Style des champs de saisie */
+input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 2px solid #ffd700;
+  border-radius: 10px;
+  background-color: #fff9c4; /* Jaune très pâle pour l'intérieur */
+  color: #3e2723; /* Texte marron foncé */
+  font-size: 16px;
+  box-sizing: border-box; /* Évite que l'input dépasse */
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ffffff;
+  box-shadow: 0 0 10px #ffd700;
+  transform: scale(1.02);
+}
+
+input::placeholder {
+  color: #a1887f;
+}
+
+/* Bouton principal : Se connecter */
+button:nth-of-type(1) {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffd700; /* Jaune Or */
+  color: #4b3621; /* Texte Marron */
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  margin-bottom: 15px;
+}
+
+button:nth-of-type(1):hover {
+  background-color: #ffea00;
+  transform: translateY(-2px);
+}
+
+/* Bouton secondaire : Création de compte */
+button:nth-of-type(2) {
+  background: transparent;
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:nth-of-type(2):hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: #fff;
+}
+
+/* Petit effet sur les boutons quand on clique */
+button:active {
+  transform: scale(0.98);
+}

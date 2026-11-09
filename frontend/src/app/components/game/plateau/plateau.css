@@ -1,0 +1,159 @@
+.grille {
+    display: grid;
+    border: 4px solid #4b3621;
+    border-radius: 4px;
+    width: fit-content;
+    margin: 0 auto;
+    position: relative;
+    background-color: #fdf5e6;
+    box-shadow: 0 8px 32px rgba(75, 54, 33, 0.4);
+    overflow: visible;
+}
+
+/* ── Inversion de la carte pour le joueur blanc ─────────────────── */
+.grille.flipped {
+    transform: rotate(180deg);
+}
+.grille.flipped .mullah-icon {
+    display: inline-block;
+    transform: rotate(180deg);
+}
+
+/* ── Cases du damier ─────────────────────────────────────────────── */
+.carre {
+    width: 80px;
+    height: 80px;
+    box-sizing: border-box;
+    border: 0.5px solid rgba(75, 54, 33, 0.25);
+}
+
+.brown { background-color: #8b4513; }
+.blanc { background-color: #fff9c4; }
+
+.diag-desc {
+    background-image: linear-gradient(
+        to bottom right,
+        transparent 49%, rgba(75, 54, 33, 0.5) 49%,
+        rgba(75, 54, 33, 0.5) 51%, transparent 51%
+    );
+}
+.diag-asc {
+    background-image: linear-gradient(
+        to top right,
+        transparent 49%, rgba(75, 54, 33, 0.5) 49%,
+        rgba(75, 54, 33, 0.5) 51%, transparent 51%
+    );
+}
+
+/* ── Intersections ───────────────────────────────────────────────── */
+.intersection {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.15s;
+}
+
+.intersection:hover {
+    background-color: rgba(75, 54, 33, 0.12);
+}
+
+/* Case cible valide : anneau de surlignage */
+.intersection.is-target {
+    background-color: rgba(0, 200, 100, 0.15);
+    box-shadow: 0 0 0 2px rgba(0, 200, 100, 0.5);
+}
+
+.intersection.is-target:hover {
+    background-color: rgba(0, 200, 100, 0.28);
+}
+
+/* ── Pièces ──────────────────────────────────────────────────────── */
+.piece {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 3px solid rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+}
+
+.noire {
+    background: radial-gradient(circle at 35% 35%, #5a3e2b, #1a0f07);
+    border-color: #3d2b1a;
+}
+
+.jaune {
+    background: radial-gradient(circle at 35% 35%, #ffe566, #c8950a);
+    border-color: #a07708;
+}
+
+.mullah {
+    border-color: #ff6b00;
+    border-width: 3px;
+}
+
+.mullah-icon {
+    font-size: 20px;
+    color: #ff6b00;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+/* ── États sélection / highlight ─────────────────────────────────── */
+.piece.is-selected {
+    border: 4px solid #ff4500;
+    transform: scale(1.12);
+    box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.4), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.piece.must-capture {
+    border: 4px solid #00e676;
+    animation: pulse-green 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-green {
+    from { box-shadow: 0 0 6px #00e676, 0 3px 8px rgba(0,0,0,0.35); }
+    to   { box-shadow: 0 0 20px #00e676, 0 3px 8px rgba(0,0,0,0.35); }
+}
+
+/* ── Animation de dépose de pièce ────────────────────────────────── */
+.piece.just-landed {
+  animation: land-glow 0.55s ease-out;
+}
+
+@keyframes land-glow {
+  0%   { box-shadow: 0 0 0 6px rgba(255,255,255,0.8), 0 0 24px rgba(255,255,255,0.6); transform: scale(1.25); }
+  40%  { box-shadow: 0 0 0 3px rgba(255,215,0,0.6),   0 0 14px rgba(255,215,0,0.4);  transform: scale(0.95); }
+  70%  { transform: scale(1.05); }
+  100% { box-shadow: 0 3px 8px rgba(0,0,0,0.35); transform: scale(1); }
+}
+
+/* ── Indicateur de case valide (vide) ────────────────────────────── */
+.valid-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: rgba(0, 200, 100, 0.75);
+    box-shadow: 0 0 8px rgba(0, 200, 100, 0.6);
+    animation: dot-pulse 1s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.valid-dot.strong-node {
+    width: 20px;
+    height: 20px;
+}
+
+@keyframes dot-pulse {
+    from { opacity: 0.6; transform: scale(0.9); }
+    to   { opacity: 1;   transform: scale(1.1); }
+}

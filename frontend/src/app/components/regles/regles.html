@@ -1,0 +1,112 @@
+<div class="page">
+  <div class="rules-card">
+
+    <div class="card-header">
+      <span class="logo-piece"> - </span>
+      <h1>Règles du Zamma</h1>
+      <span class="logo-piece"> - </span>
+    </div>
+
+    <div class="demo-nav">
+      @for (d of demos; track $index) {
+        <button class="nav-btn" [class.nav-active]="active === $index" (click)="active = $index">
+          <span class="nav-label">{{ d.label }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="card-body">
+
+      <!-- Plateau SVG calculé depuis regles.ts -->
+      <div class="board-wrap">
+        <svg class="board-svg" viewBox="0 0 300 300" width="300" height="300">
+          <defs>
+            <radialGradient id="rg-b" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#5a3e2b"/>
+              <stop offset="100%" stop-color="#1a0f07"/>
+            </radialGradient>
+            <radialGradient id="rg-y" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#ffe566"/>
+              <stop offset="100%" stop-color="#c8950a"/>
+            </radialGradient>
+          </defs>
+
+          @for (l of hLines; track $index) {
+            <line [attr.x1]="l.x1" [attr.y1]="l.y1" [attr.x2]="l.x2" [attr.y2]="l.y2"
+                  stroke="#8b6945" stroke-width="1.5"/>
+          }
+          @for (l of vLines; track $index) {
+            <line [attr.x1]="l.x1" [attr.y1]="l.y1" [attr.x2]="l.x2" [attr.y2]="l.y2"
+                  stroke="#8b6945" stroke-width="1.5"/>
+          }
+          @for (l of dLines; track $index) {
+            <line [attr.x1]="l.x1" [attr.y1]="l.y1" [attr.x2]="l.x2" [attr.y2]="l.y2"
+                  stroke="#6b5235" stroke-width="1" opacity="0.65"/>
+          }
+          @for (n of allNodes; track $index) {
+            <circle
+              [attr.cx]="nx(n.c)"
+              [attr.cy]="ny(n.r)"
+              [attr.r]="n.strong ? 4 : 2.5"
+              [attr.fill]="n.strong ? '#a07040' : '#6b5235'"
+              [attr.opacity]="n.strong ? '1' : '0.6'"/>
+          }
+
+          <!-- ── Demo 0 : Déplacer — pièce au centre, 8 cibles valides ── -->
+          @if (active === 0) {
+            <circle cx="150" cy="80"  r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="220" cy="80"  r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="80"  cy="80"  r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="80"  cy="150" r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="220" cy="150" r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="80"  cy="220" r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="150" cy="220" r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="220" cy="220" r="7" fill="rgba(0,210,100,0.7)" class="tgt"/>
+            <circle cx="150" cy="150" r="16" fill="url(#rg-b)" stroke="#3d2b1a" stroke-width="2.5" class="p-move"/>
+          }
+
+          <!-- ── Demo 1 : Capturer — saut vertical de (0,2) à (2,2) ── -->
+          @if (active === 1) {
+            <circle cx="150" cy="10"  r="16" fill="url(#rg-b)" stroke="#3d2b1a" stroke-width="2.5" class="p-cap-b"/>
+            <circle cx="150" cy="80"  r="16" fill="url(#rg-y)" stroke="#a07708" stroke-width="2.5" class="p-cap-w"/>
+            <circle cx="150" cy="150" r="7"  fill="rgba(0,210,100,0.7)" class="tgt"/>
+          }
+
+          <!-- ── Demo 2 : Enchaîner — double saut diagonal ── -->
+          @if (active === 2) {
+            <path d="M10,10 L150,150 L290,290" stroke="#00d264" stroke-width="1.5"
+                  stroke-dasharray="8 5" fill="none" opacity="0.35"/>
+            <circle cx="80"  cy="80"  r="16" fill="url(#rg-y)" stroke="#a07708" stroke-width="2.5" class="p-chain-w1"/>
+            <circle cx="220" cy="220" r="16" fill="url(#rg-y)" stroke="#a07708" stroke-width="2.5" class="p-chain-w2"/>
+            <circle cx="10"  cy="10"  r="16" fill="url(#rg-b)" stroke="#3d2b1a" stroke-width="2.5" class="p-chain-b"/>
+          }
+
+          <!-- ── Demo 3 : Moul — glisse toute la ligne, capture à distance ── -->
+          @if (active === 3) {
+            <circle cx="220" cy="150" r="16" fill="url(#rg-y)" stroke="#a07708" stroke-width="2.5" class="p-moul-w"/>
+            <g class="p-moul-g">
+              <circle cx="10" cy="150" r="16" fill="url(#rg-b)" stroke="#ff6b00" stroke-width="3"/>
+              <text x="10" y="150" text-anchor="middle" dominant-baseline="middle"
+                    fill="#ff6b00" font-size="14" font-weight="bold">♛</text>
+            </g>
+          }
+
+        </svg>
+      </div>
+
+      <div class="rule-text">
+        <h2 class="rule-title">{{ demos[active].title }}</h2>
+        <p class="rule-body">{{ demos[active].text }}</p>
+      </div>
+
+    </div>
+
+    <div class="card-footer">
+      <span class="help-chip"><span class="chip-key">1 clic</span> Sélectionner / Déplacer</span>
+      <span class="help-chip"><span class="chip-dot"></span> Cases valides en vert</span>
+      <span class="help-chip"><span class="chip-key">♛</span> Moul = Dame longue portée</span>
+      <span class="help-chip"><span class="chip-key">Auto</span> Séquence automatique</span>
+    </div>
+
+  </div>
+</div>

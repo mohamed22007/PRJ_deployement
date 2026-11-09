@@ -1,0 +1,30 @@
+<div class="profile-card">
+  <div class="profile-header">
+    <div class="avatar-circle">
+      {{ jouer?.nom?.charAt(0) }}
+    </div>
+    <h2>{{ jouer?.nom }}</h2>
+    <p class="jouername">@{{ jouer?.username }}</p>
+  </div>
+
+  <div class="stickers-section">
+    <div class="sticker" [style.border-color]="stickers.color">
+      <small>{{ stickers.label }}</small>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-item">
+      <label>Email</label>
+      <span>{{ jouer?.email }}</span>
+    </div>
+    <div class="info-item">
+      <label>Crédits</label>
+      <span class="gold-text">{{ jouer?.credit }} Coin</span>
+    </div>
+  </div>
+
+  <button class="btn-logout" (click)="deconnecter()">
+    Se déconnecter
+  </button>
+</div>

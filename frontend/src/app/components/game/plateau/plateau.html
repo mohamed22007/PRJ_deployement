@@ -1,0 +1,41 @@
+<div class="grille"
+     [class.flipped]="flipped"
+     [style.grid-template-columns]="'repeat(' + (taille-1) + ', 80px)'"
+     [style.grid-template-rows]="'repeat(' + (taille-1) + ', 80px)'">
+
+  <!-- Cases du damier -->
+  @for (i of carres; track i) {
+    <div class="carre" [ngClass]="[ getDiagonal(i), estbrown(i) ? 'brown' : 'blanc' ]"></div>
+  }
+
+  <!-- Intersections (pièces + cibles valides) -->
+  @for (piece of plateau; track $index) {
+    <div class="intersection"
+         [class.is-target]="validMoveTargets.includes($index)"
+         [style.left.px]="getPieceX($index)"
+         [style.top.px]="getPieceY($index)"
+         (click)="onClick($index)">
+
+      @if (piece !== 0) {
+        <!-- Pièce -->
+        <div class="piece"
+             [ngClass]="{
+               'noire':        piece === 1 || piece === 3,
+               'jaune':        piece === 2 || piece === 4,
+               'mullah':       piece === 3 || piece === 4,
+               'is-selected':  piececlick === $index,
+               'must-capture': mustCaptureIndices.includes($index) && piececlick !== $index && !pendingCapture,
+               'just-landed':  lastMovedIdx === $index && piececlick !== $index
+             }">
+          @if (piece === 3 || piece === 4) {
+            <span class="mullah-icon">♛</span>
+          }
+        </div>
+      } @else if (validMoveTargets.includes($index)) {
+        <div class="valid-dot" [class.strong-node]="isStrongNode($index)"></div>
+      }
+
+    </div>
+  }
+
+</div>

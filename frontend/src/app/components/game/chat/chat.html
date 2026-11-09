@@ -1,0 +1,23 @@
+<div class="chat-panel">
+  <div class="chat-header">Chat</div>
+
+  <div class="chat-messages">
+    @if (messages.length === 0) {
+      <div class="chat-empty">Pas des Messages</div>
+    }
+    @for (msg of messages; track msg.messageId ?? $index) {
+      <div class="chat-msg" [ngClass]="msg.sender === myUsername ? 'chat-msg-me' : 'chat-msg-other'">
+        <span class="chat-sender">{{ msg.sender }}</span>
+        <span class="chat-text">{{ msg.content }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="chat-input-row">
+    <input type="text"
+           [(ngModel)]="newMessage"
+           placeholder="Message..."
+           (keyup.enter)="send()" />
+    <button (click)="send()">&#9658;</button>
+  </div>
+</div>

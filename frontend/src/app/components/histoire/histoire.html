@@ -1,0 +1,82 @@
+<div class="historique-page">
+  <h1>Historique & Classement</h1>
+
+  <div class="tabs">
+    <button class="tab-btn" [ngClass]="{'active': activeTab === 'history'}" (click)="switchTab('history')">
+      Mes parties
+    </button>
+    <button class="tab-btn" [ngClass]="{'active': activeTab === 'ranking'}" (click)="switchTab('ranking')">
+      Classement
+    </button>
+  </div>
+
+  <!-- Historique des parties -->
+  @if (activeTab === 'history') {
+    <div class="tab-content">
+      @if (loading) {
+        <div class="empty">Chargement...</div>
+      } @else if (history.length === 0) {
+        <div class="empty">Aucune partie terminée </div>
+      } @else {
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Adversaire</th>
+              <th>Résultat</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (game of history; track game.gameId) {
+              <tr>
+                <td>{{ game.opponent }}</td>
+                <td>
+                  <span class="result-badge"
+                    [ngClass]="{
+                      'win':  game.result === 'Victoire',
+                      'loss': game.result === 'Défaite',
+                      'draw': game.result === 'Nul'
+                    }">{{ game.result }}</span>
+                </td>
+                <td>{{ formatDate(game.date) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+
+  <!-- Classement -->
+  @if (activeTab === 'ranking') {
+    <div class="tab-content">
+      @if (ranking.length === 0) {
+        <div class="empty">Chargement...</div>
+      } @else {
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Joueur</th>
+              <th>Crédits</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (entry of ranking; track entry.username; let i = $index) {
+              <tr [ngClass]="{'my-row': entry.username === myUsername}">
+                <td class="rank-cell">
+                  @if (i === 0) { <span>🥇</span> }
+                  @else if (i === 1) { <span>🥈</span> }
+                  @else if (i === 2) { <span>🥉</span> }
+                  @else { <span>{{ i + 1 }}</span> }
+                </td>
+                <td>{{ entry.nom }}</td>
+                <td class="credit-cell">{{ entry.credit }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+</div>

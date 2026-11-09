@@ -1,0 +1,58 @@
+<div class="mail-container">
+  <div class="mail-header">
+    @if (unreadCount > 0) {
+      <span class="unread-badge">{{ unreadCount }} non lu(s)</span>
+    }
+    @if (isLoading) {
+      <span class="loading-dot">•••</span>
+    }
+  </div>
+
+  @if (erreur) {
+    <div class="mail-error">{{ erreur }}</div>
+  }
+
+  <div class="mail-list">
+    @if (!isLoading && inbox.length === 0 && !erreur) {
+      <div class="empty-inbox">
+        <p>Boîte Vide</p>
+      </div>
+    }
+
+    @for (mail of inbox; track mail.id) {
+      <div
+        class="mail-item"
+        [class.unread]="!mail.isRead"
+        [class.open]="openMail?.id === mail.id"
+        (click)="ouvrirMail(mail)"
+      >
+        <div class="mail-icon">
+          <i class="fas" [class.fa-envelope]="!mail.isRead" [class.fa-envelope-open]="mail.isRead"></i>
+        </div>
+
+        <div class="mail-content">
+          <div class="mail-top-row">
+            <span class="sender">De : {{ mail.sender }}</span>
+            <span class="date">{{ mail.sentDate | date:'dd/MM/yy HH:mm' }}</span>
+          </div>
+          <div class="subject">{{ mail.subject }}</div>
+
+          @if (openMail?.id === mail.id) {
+            <div class="mail-body" (click)="$event.stopPropagation()">
+              <p>{{ mail.content }}</p>
+
+              @if (extractGameToken(mail)) {
+                <button
+                  class="btn-join-game"
+                  (click)="rejoindreDepuisMail(extractGameToken(mail)!, $event)"
+                >
+                  Commncer le Jeu→
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

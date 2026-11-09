@@ -1,0 +1,108 @@
+:host {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.profile-card {
+  background-color: #4b3621; /* Marron */
+  border: 3px solid #ffd700; /* Jaune Or */
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  background-color: #ffd700;
+  color: #4b3621;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: bold;
+  margin: 0 auto 15px;
+}
+
+.username {
+  color: #ffd700;
+  font-style: italic;
+  margin-top: -10px;
+}
+
+/* Zone des Stickers */
+.stickers-section {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.sticker {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid;
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sticker span { font-size: 18px; }
+.sticker small { font-size: 10px; text-transform: uppercase; }
+
+/* Grille d'informations */
+.info-grid {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.info-item:last-child { border-bottom: none; }
+
+.info-item label {
+  color: #a1887f;
+  font-weight: bold;
+}
+
+.gold-text {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.btn-logout {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: transparent;
+  border: 2px solid #e53935;
+  color: #e53935;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-logout:hover {
+  background: #e53935;
+  color: white;
+}

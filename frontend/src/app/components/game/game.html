@@ -1,0 +1,136 @@
+<div class="gamepage">
+
+  <!-- ÉCRAN 1 : MENU LOBBY -->
+  @if (gameState === 'MENU') {
+    <div class="lobby-container">
+      <div class="lobby-title">
+        <span class="logo-piece"> - </span>
+        <h1>Zamma Online</h1>
+        <span class="logo-piece logo-piece-white"> - </span>
+      </div>
+      <div class="lobby-card">
+        <button class="btn-primary" (click)="creerPartie()" [disabled]="creating">
+          {{ creating ? 'Création...' : 'Créer une partie' }}
+        </button>
+        <div class="divider"><span>OU</span></div>
+        <div class="join-section">
+          <input type="text" [(ngModel)]="joinTokenInput" placeholder="Code" />
+          <button class="btn-secondary" (click)="rejoindrePartie()">Rejoindre</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ÉCRAN 2 : SALLE D'ATTENTE -->
+  @if (gameState === 'WAITING') {
+    <div class="lobby-container">
+      <h1>En attente </h1>
+      <div class="lobby-card">
+        <p>Partagez Le code</p>
+        <div class="token-display">{{ currentGame?.joinToken }}</div>
+
+        <button class="btn-secondary" (click)="showInviteForm = !showInviteForm">
+          {{ showInviteForm ? 'Annuler' : 'Inviter par mail' }}
+        </button>
+
+        @if (showInviteForm) {
+          <div class="invite-form">
+            <input type="text" [(ngModel)]="inviteUsername" placeholder="Nom d'utilisateur..." />
+            <button class="btn-primary" (click)="sendInvitation()">Envoyer</button>
+            @if (inviteStatus) { <p class="invite-status">{{ inviteStatus }}</p> }
+          </div>
+        }
+
+        <div class="loader"></div>
+        <button class="btn-danger" (click)="quitterPartie()">Annuler</button>
+      </div>
+    </div>
+  }
+
+  <!-- ÉCRAN 3 : PLATEAU DE JEU -->
+  @if (gameState === 'PLAYING') {
+    <div class="game-wrapper">
+
+      <!-- En-tête -->
+      <div class="game-header">
+        <div class="player-info">
+          <div class="player-card" [class.active-player]="currentTurn === 'black'">
+            <span class="piece-icon piece-black"> - </span>
+            <span class="player-name">{{ currentGame?.playerBlack ?? '...' }}</span>
+            <span class="piece-count">{{ blackPieceCount }} pièces</span>
+          </div>
+          <div class="turn-arrow">{{ isMyTurn ? 'Votre tour' : 'Tour Ami' }}</div>
+          <div class="player-card" [class.active-player]="currentTurn === 'white'">
+            <span class="piece-icon piece-white"> - </span>
+            <span class="player-name">{{ currentGame?.playerWhite ?? '...' }}</span>
+            <span class="piece-count">{{ whitePieceCount }} pièces</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="my-color-badge" [class.badge-black]="myColor === 'black'" [class.badge-white]="myColor === 'white'">
+            Vous : {{ myColor === 'black' ? '⚫ Noir' : '🟡 Jaune' }}
+          </div>
+          <button class="btn-danger" (click)="quitterPartie()">Abandonner</button>
+        </div>
+      </div>
+
+      <!-- Barre de statut du tour -->
+      <div class="status-bar" [class.status-my-turn]="isMyTurn" [class.status-opponent]="!isMyTurn">
+        @if (isMyTurn && !pendingCapture) {
+          @if (mustCaptureIndices.length > 0) {
+            <span>⚡ Capture obligatoire </span>
+          } @else {
+            <span>Votre tour </span>
+          }
+        } @else if (isMyTurn && pendingCapture) {
+          <span> Séquence de capture </span>
+        } @else {
+          <span>En attente </span>
+        }
+      </div>
+
+      @if (moveError) {
+        <div class="move-error-bar">⚠ {{ moveError }}</div>
+      }
+
+      <!-- Zone de jeu -->
+      <div class="game-area">
+        <app-plateau
+          [plateau]="plateau"
+          [carres]="carres"
+          [taille]="taille"
+          [piececlick]="piececlick"
+          [pendingCapture]="pendingCapture"
+          [mustCaptureIndices]="mustCaptureIndices"
+          [validMoveTargets]="validMoveTargets"
+          [lastMovedIdx]="lastMovedIdx"
+          [flipped]="myColor === 'black'"
+          (pieceClicked)="selctepiece($event)">
+        </app-plateau>
+
+        <app-game-chat
+          [messages]="messages"
+          [myUsername]="myUsername"
+          (messageSent)="onMessageSent($event)">
+        </app-game-chat>
+      </div>
+
+    </div>
+  }
+
+  <!-- ÉCRAN 4 : FIN DE PARTIE -->
+  @if (gameState === 'FINISHED') {
+    <div class="lobby-container">
+      <h1>Partie terminée</h1>
+      <div class="lobby-card">
+        <div class="result-icon">
+          {{ gameResult.includes('gagné') ? 'Win' : gameResult.includes('nul') ? 'Abandoner' : 'Lose' }}
+        </div>
+        <p class="result-text">{{ gameResult }}</p>
+        <button class="btn-primary" (click)="resetGame()">Retour au menu</button>
+      </div>
+    </div>
+  }
+
+</div>
