@@ -21,6 +21,10 @@ jobs:
               run: make install
             #2 - Executer et compiler le site 
             - name: run
+              env:
+                DB_NAME: test_db
+                DB_USER: test_user
+                DB_CODE: test_password
               run: make run
 
             #3 - Netoyyer 
