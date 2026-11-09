@@ -1,5 +1,5 @@
 #
-COMPOSE = docker-compose
+COMPOSE = docker compose
 
 #installer docker 
 install: 
@@ -15,7 +15,7 @@ run:
 clean:
 	$(COMPOSE) down --rmi all --volumes 
 	rm -rf backend/target
-	
+
 #Pour logs
 logs:
 	$(COMPOSE) logs -fA
