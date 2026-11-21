@@ -19,3 +19,12 @@ clean:
 #Pour logs
 logs:
 	$(COMPOSE) logs -fA
+
+#Lancer les tests (backend + frontend)
+test: test-back test-front
+
+test-back:
+	cd backend && mvn -B test
+
+test-front:
+	cd frontend && npm ci && npx ng test --watch=false
