@@ -1,1 +1,24 @@
+# Secrets
 .env
+*.pem
+*.key
+
+# Build
+backend/target/
+frontend/dist/
+frontend/.angular/
+frontend/node_modules/
+
+# Terraform
+infra/terraform/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+
+# Ansible 
+infar/ansible/inventory.ini
+
+#IDE 
+.vscode/
+.idea/

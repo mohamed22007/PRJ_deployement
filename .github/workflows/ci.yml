@@ -1,11 +1,12 @@
 name: Test run
 
 on:
-    push:
-        branches: [ "main" ]
+    #push:
+    #    branches: [ "main" ]
     # declachment en cas de pull request 
     #pull_request:
     #    barnches: [ "main" ]
+    workflow_dispatch:
 
 jobs:
     run-tests:
