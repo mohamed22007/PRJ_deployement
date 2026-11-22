@@ -1,2 +1,3 @@
-export const API_BASE = 'http://localhost:8787';
-export const API_WS   = 'ws://localhost:8787/ws';
+export const API_BASE = '';
+export const API_WS = `${location.protocol === 'https:' ? 'wss' :
+'ws'}://${location.host}/ws`;

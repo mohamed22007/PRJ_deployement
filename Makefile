@@ -1,5 +1,6 @@
 #
 COMPOSE = docker compose
+.PHONY: install test test-back test-front run smoke logs stop clean
 
 #installer docker 
 install: 
@@ -8,13 +9,8 @@ install:
 
 #run Project
 run:   
-	cd backend && mvn clean package -DskipTests
 	$(COMPOSE) up --build -d
 
-#Pour nettoyage
-clean:
-	$(COMPOSE) down --rmi all --volumes 
-	rm -rf backend/target
 
 #Pour logs
 logs:
@@ -28,3 +24,13 @@ test-back:
 
 test-front:
 	cd frontend && npm ci && npx ng test --watch=false
+
+stop:
+	$(COMPOSE) down
+
+clean:
+	$(COMPOSE) down --rmi local --volumes
+	rm -rf backend/target
+
+smoke:
+	./smoke_test.sh

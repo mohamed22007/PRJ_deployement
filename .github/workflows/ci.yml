@@ -8,26 +8,61 @@ on:
     #    barnches: [ "main" ]
     workflow_dispatch:
 
+# Moindre privilège : le token GitHub ne peut que lire le code
+permissions:
+  contents: read
 jobs:
-    run-tests:
-        runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
+    steps:
 
-        steps:
-            #1 - clone le code sur le serveur
-            - name: recuperer le site web
-              uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: "17"
+        cache: maven
 
-            # Installation docker 
-            - name: docker
-              run: make install
-            #2 - Executer et compiler le site 
-            - name: run
-              env:
-                DB_NAME: test_db
-                DB_USER: test_user
-                DB_CODE: test_password
-              run: make run
+    - name: Tests backend
+      working-directory: backend
+      run: mvn -B test
 
-            #3 - Netoyyer 
-            - name: clean
-              run: make clean
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+        cache: npm
+        cache-dependency-path: frontend/package-lock.json
+    - name: Tests frontend
+      working-directory: frontend
+      run: |
+        npm ci
+        npx ng test --watch=false
+
+  build:
+    needs: test 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construire les images
+        run: |
+          cp .env.example .env
+          docker compose build
+
+  smoke-test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lancer la stack
+        run: |
+          cp .env.example .env
+          docker compose up -d --build
+      - name: Smoke test
+        run: ./smoke_test.sh http://localhost
+      - name: Logs en cas d'échec
+        if: failure()
+        run: docker compose logs
+      - name: Nettoyer
+        if: always()
+        run: docker compose down -v
+    

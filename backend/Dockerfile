@@ -1,5 +1,18 @@
+# Etape 1 : Compiler le backend 
+FROM  maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn -B -q dependency:go-offline
+COPY src ./src
+# Les tests sont lancés dans le job CI "test", pas dans le build de l'image
+RUN mvn -B -q package -DskipTests
+
+# Etape 2 : Execution 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY target/*.jar app.jar
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+RUN useradd --system --uid 1001 spring
+COPY --from=build /app/target/*.jar app.jar
+USER spring
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
