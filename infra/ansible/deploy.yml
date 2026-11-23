@@ -1,0 +1,85 @@
+- name: Installer docker et deployer le projet
+  hosts: app
+  become: true
+  vars:
+    app_dir: /opt/prj
+    repo_url: https://github.com/mohamed22007/PRJ_deployement.git
+  
+  tasks:
+    - name: Paquests de base
+      ansible.builtin.apt:
+        name: [ca-certificates, curl, git]
+        update_cache: true
+      
+    - name: Dossier des clés apt 
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Clé GPG Docker 
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: "0644"
+
+    - name: Dépot APT docker 
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable "
+        filename: docker
+
+    - name: Installer Docker te les plugins compose
+      ansible.builtin.apt:
+        name: [docker-ce, docker-ce-cli, containerd.io, docker-buildx-plugin, docker-compose-plugin]
+        update_cache: true
+
+    - name: Docker demarre au boot 
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Utiliser ubuntu dans le groupe docker 
+      ansible.builtin.user:
+        name: ubuntu
+        groups: docker 
+        append: true
+    
+    # Ajouter 2Go de ram swap pour compilation angualr et docker
+    - name: Creer le ficher swap
+      ansible.builtin.command: fallocate -l 2G /swapfile
+      args:
+        creates: /swapfile
+      register: swap
+
+    - name: Activer le swap 
+      when: swap.changed
+      ansible.builtin.shell: chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+
+    - name: Swap permanent
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        line: "/swapfile none swap sw 0 0 "
+
+
+    - name: Récupérer le code
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: main
+        force: true
+
+    - name: Copier .env 
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../.env"
+        dest: "{{ app_dir }}/.env"
+        mode: "0600"
+
+    - name: Lancer la stack
+      ansible.builtin.command: docker compose up -d --build
+      args:
+        chdir: "{{ app_dir }}"
+      changed_when: true
+        
+        
+        

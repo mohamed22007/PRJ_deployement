@@ -17,7 +17,7 @@ infra/terraform/.terraform/
 crash.log
 
 # Ansible 
-infar/ansible/inventory.ini
+infra/ansible/inventory.ini
 
 #IDE 
 .vscode/
