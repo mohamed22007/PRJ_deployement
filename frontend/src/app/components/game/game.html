@@ -15,7 +15,9 @@
         <div class="divider"><span>OU</span></div>
         <div class="join-section">
           <input type="text" [(ngModel)]="joinTokenInput" placeholder="Code" />
-          <button class="btn-secondary" (click)="rejoindrePartie()">Rejoindre</button>
+          <button class="btn-secondary" (click)="rejoindrePartie()" [disabled]="joining">
+            {{ joining ? 'Connexion...' : 'Rejoindre' }}
+          </button>
         </div>
       </div>
     </div>

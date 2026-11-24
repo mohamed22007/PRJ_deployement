@@ -50,6 +50,7 @@ export class GameComponent implements OnInit, OnDestroy {
   gameResult = '';
   moveError = '';
   creating = false;
+  joining = false;
 
   // ── Chat ──────────────────────────────────────────────────────────────
   messages: Message[] = [];
@@ -141,17 +142,28 @@ export class GameComponent implements OnInit, OnDestroy {
 
   rejoindrePartie() {
     const token = (this.joinTokenInput || '').trim().toUpperCase();
-    if (!token) return;
+    // Évite un 2e appel si on clique deux fois pendant la requête
+    if (!token || this.joining) return;
+    this.joining = true;
     this.gameService.joinGame(token).subscribe({
       next: (game) => {
+        this.joining = false;
         this.currentGame = game;
         this.gameState = 'PLAYING';
         this.updateMyColor();
         if (game.boardState) this.parseBoardState(game.boardState);
         this.startPolling(game.gameId);
         this.startChatPolling(game.gameId);
+        // L'appli est "zoneless" (pas de zone.js) : une réponse HTTP ne rafraîchit
+        // pas l'écran toute seule. Sans cette ligne, l'écran restait sur le menu
+        // et le 2e clic renvoyait "partie déjà commencée".
+        this.cdr.detectChanges();
       },
-      error: (err) => alert('Code invalide : ' + (err.error?.error ?? err.message))
+      error: (err) => {
+        this.joining = false;
+        this.cdr.detectChanges();
+        alert('Code invalide : ' + (err.error?.error ?? err.message));
+      }
     });
   }
 
@@ -183,6 +195,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameResult = '';
     this.showInviteForm = false;
     this.inviteStatus = '';
+    this.cdr.detectChanges();
   }
 
   // ═════════════════════════════════════════════════════════════════════
