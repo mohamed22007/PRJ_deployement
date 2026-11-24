@@ -3,12 +3,11 @@
   become: true
   vars:
     app_dir: /opt/prj
-    repo_url: https://github.com/mohamed22007/PRJ_deployement.git
   
   tasks:
     - name: Paquests de base
       ansible.builtin.apt:
-        name: [ca-certificates, curl, git]
+        name: [ca-certificates, curl]
         update_cache: true
       
     - name: Dossier des clés apt 
@@ -45,7 +44,7 @@
         groups: docker 
         append: true
     
-    # Ajouter 2Go de ram swap pour compilation angualr et docker
+    # 2 Go de swap : le t3.micro n'a que 1 Go de RAM (Spring + Postgres + Nginx)
     - name: Creer le ficher swap
       ansible.builtin.command: fallocate -l 2G /swapfile
       args:
@@ -62,24 +61,35 @@
         line: "/swapfile none swap sw 0 0 "
 
 
-    - name: Récupérer le code
-      ansible.builtin.git:
-        repo: "{{ repo_url }}"
-        dest: "{{ app_dir }}"
-        version: main
-        force: true
+    # le serveur ne compile plus rien, il télécharge les images de GHCR.
+    # docker-compose.yml et lancer docker compose sans sudo.
+    - name: Dossier de l'application
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
 
-    - name: Copier .env 
+    - name: Copier docker-compose.yml
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../docker-compose.yml"
+        dest: "{{ app_dir }}/docker-compose.yml"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Copier .env (secrets, jamais dans Git)
       ansible.builtin.copy:
         src: "{{ playbook_dir }}/../../.env"
         dest: "{{ app_dir }}/.env"
+        owner: ubuntu
+        group: ubuntu
         mode: "0600"
 
-    - name: Lancer la stack
-      ansible.builtin.command: docker compose up -d --build
+    - name: Lancer la stack depuis les images GHCR (tag latest)
+      ansible.builtin.shell: docker compose pull && docker compose up -d --no-build --remove-orphans
       args:
         chdir: "{{ app_dir }}"
+      become_user: ubuntu
       changed_when: true
-        
-        
-        

@@ -15,6 +15,7 @@ services:
       retries: 10
     restart: unless-stopped
   backend:
+    image: ghcr.io/mohamed22007/prj-backend:${TAG:-latest}
     build: ./backend
     depends_on:
       db:
@@ -33,6 +34,7 @@ services:
     restart: unless-stopped
 
   frontend:
+    image: ghcr.io/mohamed22007/prj-frontend:${TAG:-latest}
     build: ./frontend
     depends_on:
       backend:
