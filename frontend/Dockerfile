@@ -7,8 +7,10 @@ COPY . .
 RUN npm run build
 #checkov:skip=CKV_DOCKER_2:Healthcheck défini dans docker-compose.yml.
 # Etape 2 : servir les fichiers compilés avec Nginx
-
-FROM nginxinc/nginx-unprivileged:stable-alpine
+# mainline : nginx.org y publie les correctifs de sécurité en premier
+# (stable-alpine restait en 1.30.6, vulnérable)
+FROM nginxinc/nginx-unprivileged:mainline-alpine
+# apk a besoin de root pour mettre à jour les paquets Alpine (musl, curl, libxml2...)
 USER root
 RUN apk upgrade --no-cache
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
