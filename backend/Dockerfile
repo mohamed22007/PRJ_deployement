@@ -1,6 +1,8 @@
 # Etape 1 : Compiler le backend 
 FROM  maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
+# .mvn/maven.config : réessayer quand Maven Central répond 429 (Too Many Requests)
+COPY .mvn ./.mvn
 COPY pom.xml .
 RUN mvn -B -q dependency:go-offline
 COPY src ./src

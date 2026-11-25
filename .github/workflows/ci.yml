@@ -57,6 +57,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
+          pull: true   # toujours repartir de la dernière image de base (correctifs sécurité)
           push: ${{ github.event_name == 'push' }}
           tags: |
             ghcr.io/mohamed22007/prj-backend:${{ github.sha }}
@@ -67,6 +68,7 @@ jobs:
         uses: docker/build-push-action@v6
         with: 
           context: ./frontend
+          pull: true
           push: ${{ github.event_name == 'push' }}
           tags: |
             ghcr.io/mohamed22007/prj-frontend:${{ github.sha }}

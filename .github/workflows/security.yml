@@ -59,7 +59,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Construire l'image
-              run: docker build -t prj-${{ matrix.service }}:scan ./${{ matrix.service }}
+              run: docker build --pull -t prj-${{ matrix.service }}:scan ./${{ matrix.service }}
             - uses: aquasecurity/trivy-action@v0.36.0
               with:
                 image-ref: prj-${{ matrix.service }}:scan
