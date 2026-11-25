@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - uses: actions/checkout@v4
-    - uses: actions/setup-java@v4
+    - uses: actions/checkout@v7
+    - uses: actions/setup-java@v6
       with:
         distribution: temurin
         java-version: "17"
@@ -27,7 +27,7 @@ jobs:
       working-directory: backend
       run: mvn -B test
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v7
       with:
         node-version: "22"
         cache: npm
@@ -45,16 +45,16 @@ jobs:
       contents: read
       packages: write   #Pour pousser sur ghrc.io
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
         if: github.event_name == 'push'
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Backend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./backend
           pull: true   # toujours repartir de la dernière image de base (correctifs sécurité)
@@ -65,7 +65,7 @@ jobs:
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
       - name: Frontend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with: 
           context: ./frontend
           pull: true
@@ -80,7 +80,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Lancer la stack
         run: |
           cp .env.example .env
@@ -107,10 +107,10 @@ jobs:
       id-token: write   # permet à GitHub de fabriquer le jeton OIDC
       contents: read    # nécessaire pour actions/checkout
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Identifiants AWS temporaires (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-west-3
