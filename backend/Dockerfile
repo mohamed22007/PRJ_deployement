@@ -8,7 +8,7 @@ COPY src ./src
 RUN mvn -B -q package -DskipTests
 
 # Etape 2 : Execution 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:25-jre
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 RUN useradd --system --uid 1001 spring
