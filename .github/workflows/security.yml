@@ -25,27 +25,53 @@ jobs:
 
     checkov:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            security-events: write   # pour publier les résultats dans l'onglet Security
         steps:
             - uses: actions/checkout@v4
             - uses: bridgecrewio/checkov-action@v12
               with:
                 directory: .
-                farmework: terraform,dockerfile
+                framework: terraform,dockerfile
                 quiet: true
+                # cli = lisible dans les logs ; sarif = fichier pour l'onglet Security
+                output_format: cli,sarif
+                output_file_path: console,checkov.sarif
+            - name: Publier dans Security > Code scanning
+              # always() : même (surtout) si Checkov a trouvé des problèmes. Pas sur les PR
+              # (le jeton des PR Dependabot n'a pas le droit d'écrire dans Security)
+              if: always() && github.event_name != 'pull_request'
+              uses: github/codeql-action/upload-sarif@v4
+              with:
+                sarif_file: checkov.sarif
+                category: checkov
 
     trivy:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            security-events: write
         strategy:
-            matrix: 
+            fail-fast: false     # scanner les 2 images même si la 1re échoue
+            matrix:
                 service: [backend, frontend]
         steps:
             - uses: actions/checkout@v4
-            - name: Construire l image
+            - name: Construire l'image
               run: docker build -t prj-${{ matrix.service }}:scan ./${{ matrix.service }}
-            - uses: aquasecurity/trivy-action@0.28.0
+            - uses: aquasecurity/trivy-action@v0.36.0
               with:
-                image-ref: prg-${{matrix.service}}:scan
+                image-ref: prj-${{ matrix.service }}:scan
                 severity: CRITICAL,HIGH
                 ignore-unfixed: true
+                format: sarif
+                output: trivy-${{ matrix.service }}.sarif
+                limit-severities-for-sarif: true
                 exit-code: "1"
-
+            - name: Publier dans Security > Code scanning
+              if: always() && github.event_name != 'pull_request'
+              uses: github/codeql-action/upload-sarif@v4
+              with:
+                sarif_file: trivy-${{ matrix.service }}.sarif
+                category: trivy-${{ matrix.service }}

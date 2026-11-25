@@ -1,25 +1,56 @@
+# Dependabot : propose des PR de mise à jour. La CI (tests + scans) vérifie chaque PR.
+# Stratégie : les versions MAJEURES (souvent incompatibles) sont ignorées pour le code ;
+# les mineures/correctifs sont regroupés en UNE seule PR par écosystème.
 version: 2
 updates:
   - package-ecosystem: maven
     directory: /backend
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      maven:
+        update-types: [minor, patch]
+
   - package-ecosystem: npm
     directory: /frontend
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      npm:
+        update-types: [minor, patch]
+
   - package-ecosystem: docker
     directories:
       - /backend
       - /frontend
     schedule:
       interval: weekly
+    ignore:
+      # Java 17 et Node 22 sont choisis volontairement : on change de version majeure à la main
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "maven"   # son tag contient la version de Java (…-temurin-17)
+
+  # Les actions GitHub : les majeures sont en général sans risque, on les garde (regroupées)
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+
   - package-ecosystem: terraform
     directory: /infra/terraform
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
