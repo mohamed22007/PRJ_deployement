@@ -1,9 +1,9 @@
-# Dhamet : jeu de dames mauritanien, déployé en continu sur AWS
+# Dhamet : jeu de dames online, déployé en continu sur AWS
 
 [![CI/CD](https://github.com/mohamed22007/PRJ_deployement/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamed22007/PRJ_deployement/actions/workflows/ci.yml)
 [![Security](https://github.com/mohamed22007/PRJ_deployement/actions/workflows/security.yml/badge.svg)](https://github.com/mohamed22007/PRJ_deployement/actions/workflows/security.yml)
 
-**Dhamet** (Zamma) est un jeu de dames mauritanien multijoueur en temps réel : création de parties, code d'invitation, chat en partie, messagerie entre joueurs, classement et historique.
+**Dhamet** (Zamma) est un jeu de dames  multijoueur en temps réel : création de parties, code d'invitation, chat en partie, messagerie entre joueurs, classement et historique.
 
 Au-delà de l'application, ce dépôt est un **projet DevOps / DevSecOps complet**. Chaque `git push` sur `main` est testé, scanné, empaqueté en images Docker, puis déployé automatiquement sur AWS, sans clé stockée et sans port SSH ouvert à la CI.
 
