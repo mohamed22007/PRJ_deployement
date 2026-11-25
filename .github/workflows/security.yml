@@ -15,10 +15,10 @@ jobs:
     gitleaks:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with: 
                 fetch-depth: 0 # Regarder tout l'historie
-            - uses: gitleaks/gitleaks-action@v2
+            - uses: gitleaks/gitleaks-action@v3
               env: 
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -29,7 +29,7 @@ jobs:
             contents: read
             security-events: write   # pour publier les résultats dans l'onglet Security
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - uses: bridgecrewio/checkov-action@v12
               with:
                 directory: .
@@ -57,7 +57,7 @@ jobs:
             matrix:
                 service: [backend, frontend]
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - name: Construire l'image
               run: docker build -t prj-${{ matrix.service }}:scan ./${{ matrix.service }}
             - uses: aquasecurity/trivy-action@v0.36.0
