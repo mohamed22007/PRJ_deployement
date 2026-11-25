@@ -6,7 +6,7 @@ RUN mvn -B -q dependency:go-offline
 COPY src ./src
 # Les tests sont lancés dans le job CI "test", pas dans le build de l'image
 RUN mvn -B -q package -DskipTests
-
+#checkov:skip=CKV_DOCKER_2:Healthcheck défini dans docker-compose.yml.
 # Etape 2 : Execution 
 FROM eclipse-temurin:17-jre
 WORKDIR /app

@@ -26,6 +26,7 @@ resource "aws_security_group" "web" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] #Actuelment ssh est possible pour que github peut dployer les machine
   }
+  #checkov:skip=CKV_AWS_260: Site web public accecible par tout
   ingress {
     description = "HTTP"
     from_port   = 80
@@ -41,13 +42,19 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
-    description = "Sortie pat docker pull pour mettre installation"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    description = "Pour les requets HTTPS docker pull et apt "
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  egress {
+    description = "Pour les requets HTTP sortant"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_instance" "app" {
@@ -55,7 +62,12 @@ resource "aws_instance" "app" {
   instance_type          = var.instance_type
   key_name               = aws_key_pair.deploy.key_name
   vpc_security_group_ids = [aws_security_group.web.id]
+  ebs_optimized = true
+  #checkov:skip=CKV_AWS_126:Monitoring 5 min suffisant pour ce projet, le detailed monitoring est payant
+  #monitoring = true
+  #checkov:skip=CKV2_AWS_41:Aucun appel à l'API AWS depuis l'instance pour l'instant.
 
+  
   root_block_device {
     volume_size = 20
     volume_type = "gp3"

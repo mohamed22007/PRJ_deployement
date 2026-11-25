@@ -41,7 +41,7 @@ services:
         condition: service_healthy
     ports:
       # Utiliser le valeur de varible HTTP_PORT s'il exist 
-      - "${HTTP_PORT:-80}:80"
+      - "${HTTP_PORT:-80}:8080"
     restart: on-failure
 
 volumes:
