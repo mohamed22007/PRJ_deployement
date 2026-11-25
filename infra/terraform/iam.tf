@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "github_assume" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:mohamed22007/PRJ_deployement:environment:production"]
+      values   = ["repo:mohamed22007@149290083/PRJ_deployement@1451786278:environment:production"]
     }
   }
 }

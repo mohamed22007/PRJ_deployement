@@ -1,0 +1,5 @@
+# Faux positifs : correction uniquement dans Spring Framework 7 (Spring Boot 4).
+# L'application n'utilise ni XsltView ni SSE avec fragments de vue (API REST JSON uniquement).
+# A revoir lors de la migration vers Spring Boot 4.
+CVE-2026-47884 exp:2027-03-01
+CVE-2026-47890 exp:2027-03-01
