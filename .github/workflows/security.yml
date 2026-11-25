@@ -1,0 +1,51 @@
+name: Security
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    schedule:
+        - cron: "0 6 * * 1"
+
+permissions:
+    contents: read
+
+jobs:
+    gitleaks:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with: 
+                fetch-depth: 0 # Regarder tout l'historie
+            - uses: gitleaks/gitleaks-action@v2
+              env: 
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+    checkov:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: bridgecrewio/checkov-action@v12
+              with:
+                directory: .
+                farmework: terraform,dockerfile
+                quiet: true
+
+    trivy:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix: 
+                service: [backend, frontend]
+        steps:
+            - uses: actions/checkout@v4
+            - name: Construire l image
+              run: docker build -t prj-${{ matrix.service }}:scan ./${{ matrix.service }}
+            - uses: aquasecurity/trivy-action@0.28.0
+              with:
+                image-ref: prg-${{matrix.service}}:scan
+                severity: CRITICAL,HIGH
+                ignore-unfixed: true
+                exit-code: "1"
+
