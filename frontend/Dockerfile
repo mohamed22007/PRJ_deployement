@@ -11,5 +11,6 @@ FROM nginxinc/nginx-unprivileged:stable-alpine
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 # Config Nginx pour gérer les routes Angular
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+USER nginx
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

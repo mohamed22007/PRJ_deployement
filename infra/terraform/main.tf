@@ -65,9 +65,8 @@ resource "aws_instance" "app" {
   ebs_optimized = true
   #checkov:skip=CKV_AWS_126:Monitoring 5 min suffisant pour ce projet, le detailed monitoring est payant
   #monitoring = true
-  #checkov:skip=CKV2_AWS_41:Aucun appel à l'API AWS depuis l'instance pour l'instant.
+  iam_instance_profile = aws_iam_instance_profile.ec2.name
 
-  
   root_block_device {
     volume_size = 20
     volume_type = "gp3"
@@ -79,6 +78,17 @@ resource "aws_instance" "app" {
     http_tokens = "required"
   }
 
+  lifecycle {
+    ignore_changes = [ami]   # une nouvelle image Ubuntu ne doit jamais recréer le serveur
+  }
+
   tags = { Name = "prj_dhamet" }
 }
+
+resource "aws_eip" "app" {
+  instance = aws_instance.app.id
+  domain   = "vpc"
+  tags     = { Name = "prj_dhamet" }
+}
+
 
