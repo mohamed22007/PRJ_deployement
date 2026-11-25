@@ -1,5 +1,5 @@
 output "public_ip" {
-  value = aws_eip.app.public_ipt
+  value = aws_eip.app.public_ip
 }
 
 output "ssh_command" {

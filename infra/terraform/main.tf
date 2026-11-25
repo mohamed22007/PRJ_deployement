@@ -24,7 +24,7 @@ resource "aws_security_group" "web" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] #Actuelment ssh est possible pour que github peut dployer les machine
+    cidr_blocks = [var.my_ip_cidr] #Actuelment ssh est possible pour que github peut dployer les machine
   }
   #checkov:skip=CKV_AWS_260: Site web public accecible par tout
   ingress {
